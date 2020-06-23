@@ -1,0 +1,5 @@
+export ZSH=/home/debian/.oh-my-zsh
+
+if [ -f /home/debian/dotfiles/zshrc-active ]; then
+    source /home/debian/dotfiles/zshrc-active
+fi
