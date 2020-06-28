@@ -18,9 +18,22 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
   git \
   jq \
   wget \
-  libncursesw5
+  libncursesw5 \
+  libtool \
+  autoconf
 
 WORKDIR /home 
+
+# Build and install the IOHK fork of libsodium.
+RUN git clone https://github.com/input-output-hk/libsodium \
+  && cd libsodium \
+  && git checkout 66f017f1 \
+  && ./autogen.sh \
+  && ./configure \
+  && make \
+  && make install
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Install cabal
 RUN wget https://downloads.haskell.org/~cabal/cabal-install-3.2.0.0/cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz \
