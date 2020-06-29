@@ -1,7 +1,7 @@
 stages:
     - build
 
-debian-base:
+.template: &template
     stage: build
     services: 
         - docker:dind
@@ -12,5 +12,10 @@ debian-base:
         GIT_SUBMODULE_STRATEGY: recursive
     script:
         - docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
-        - docker build -t registry.gitlab.com/viper-staking/docker-containers/debian-base:latest ./debian-base
-        - docker push registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
+        - docker build -t registry.gitlab.com/viper-staking/docker-containers/$CONTAINER_NAME:latest ./$CONTAINER_NAME
+        - docker push registry.gitlab.com/viper-staking/docker-containers/$CONTAINER_NAME:latest
+
+debian-base:
+    <<: *template
+    variables:
+        CONTAINER_NAME: debian-base
