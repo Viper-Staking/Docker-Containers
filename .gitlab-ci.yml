@@ -9,11 +9,8 @@ stages:
     image: docker
     tags:
         - docker
-    variables:
-        GIT_SUBMODULE_STRATEGY: recursive
     script:
         - cd $CONTAINER_NAME
-        - pwd
         - docker login -u $CI_DEPLOY_USER -p $CI_DEPLOY_PASSWORD $CI_REGISTRY
         - docker build -t registry.gitlab.com/viper-staking/docker-containers/$CONTAINER_NAME:latest .
         - docker push registry.gitlab.com/viper-staking/docker-containers/$CONTAINER_NAME:latest
@@ -24,6 +21,7 @@ debian-base:
     stage: base
     variables:
         CONTAINER_NAME: debian-base
+        GIT_SUBMODULE_STRATEGY: recursive
 
 cardano-node:
     <<: *template
