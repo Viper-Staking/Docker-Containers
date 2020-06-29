@@ -21,7 +21,7 @@ debian-base:
     stage: base
     variables:
         CONTAINER_NAME: debian-base
-        GIT_SUBMODULE_STRATEGY: recursive
+        GIT_SUBMODULE_STRATEGY: none
 
 cardano-node:
     <<: *template
