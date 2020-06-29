@@ -21,7 +21,11 @@ debian-base:
     stage: base
     variables:
         CONTAINER_NAME: debian-base
-        GIT_SUBMODULE_STRATEGY: none
+    before_script:
+        # Make git submodules work (workaround for GitLab bug)
+        - which git || (apk --no-cache add git)
+        - git submodule sync --recursive
+        - git submodule update  --remote --recursive
 
 cardano-node:
     <<: *template
