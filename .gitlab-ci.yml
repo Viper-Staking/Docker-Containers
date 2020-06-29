@@ -1,4 +1,5 @@
 stages:
+    - setup
     - base
     - node
     - deploy
@@ -16,6 +17,12 @@ stages:
         - docker push registry.gitlab.com/viper-staking/docker-containers/$CONTAINER_NAME:latest
         - cd ..
 
+remove-submodules:
+    stage: setup
+    script:
+        # Remove submodule dir (workaround for GitLab bug)
+        - if [ -d debian-base/shared-terminal-settings ]; then rm -rf debian-base/shared-terminal-settings; fi
+
 debian-base:
     <<: *template
     stage: base
@@ -23,9 +30,8 @@ debian-base:
         CONTAINER_NAME: debian-base
         GIT_SUBMODULE_STRATEGY: recursive
     before_script:
-        # Make git submodules work (workaround for GitLab bug)
-        - if [ -d $CONTAINER_NAME/shared-terminal-settings ]; then rm -rf $CONTAINER_NAME/shared-terminal-settings; fi
         - ls $CONTAINER_NAME/shared-terminal-settings
+    after_script:
 
 cardano-node:
     <<: *template
