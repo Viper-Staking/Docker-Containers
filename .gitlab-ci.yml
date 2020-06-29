@@ -1,13 +1,15 @@
 stages:
-   - build
+    - build
 
 debian-base:
-   stage: build
-   services: 
-      - docker:dind
-   image: docker
-   tags:
-      - docker
-   script:
-      - docker build -t registry.gitlab.com/viper-staking/docker-containers/debian-base:latest ./debian-base
-      - docker push registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
+    stage: build
+    services: 
+        - docker:dind
+    image: docker
+    tags:
+        - docker
+    variables:
+        GIT_SUBMODULE_STRATEGY: recursive
+    script:
+        - docker build -t registry.gitlab.com/viper-staking/docker-containers/debian-base:latest ./debian-base
+        - docker push registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
