@@ -26,6 +26,8 @@ debian-base:
         - which git || (apk --no-cache add git)
         - git submodule sync --recursive
         - git submodule update  --remote --recursive
+        - ls
+        - ls $CONTAINER_NAME
 
 cardano-node:
     <<: *template
