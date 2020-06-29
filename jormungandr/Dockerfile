@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM debian-base:latest
 # FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
 MAINTAINER VIPER Staking Team (viperstakepool@gmail.com)
 
