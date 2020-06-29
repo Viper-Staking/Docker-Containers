@@ -1,3 +1,3 @@
 [submodule "debian-base/shared-terminal-settings"]
 	path = debian-base/shared-terminal-settings
-	url = git@gitlab.com:william-marchetto/shared-terminal-settings.git
+	url = ../../william-marchetto/shared-terminal-settings.git
