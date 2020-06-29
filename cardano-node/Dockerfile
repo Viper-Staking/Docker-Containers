@@ -2,6 +2,8 @@ FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
 # FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
 MAINTAINER VIPER Staking Team (viperstakepool@gmail.com)
 
+USER root
+
 # Update and install the required packages
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
   build-essential \
