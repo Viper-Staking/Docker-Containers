@@ -23,6 +23,7 @@ debian-base:
         CONTAINER_NAME: debian-base
     before_script:
         # Make git submodules work (workaround for GitLab bug)
+        - if [ -d $CONTAINER_NAME/shared-terminal-settings ]; then rm -rf $CONTAINER_NAME/shared-terminal-settings; fi
         - which git || (apk --no-cache add git)
         - git submodule sync --recursive
         - git submodule update  --remote --recursive -f
