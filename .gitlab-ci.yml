@@ -25,8 +25,7 @@ debian-base:
         # Make git submodules work (workaround for GitLab bug)
         - which git || (apk --no-cache add git)
         - git submodule sync --recursive
-        - git submodule update  --remote --recursive
-        - ls $CONTAINER_NAME
+        - git submodule update  --remote --recursive -f
         - ls $CONTAINER_NAME/shared-terminal-settings
 
 cardano-node:
