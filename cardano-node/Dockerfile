@@ -24,7 +24,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
   libtool \
   autoconf
 
-WORKDIR /home 
+WORKDIR /opt
 
 # Build and install the IOHK fork of libsodium.
 RUN git clone https://github.com/input-output-hk/libsodium \
@@ -66,3 +66,6 @@ RUN mkdir node && cd node \
   && wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-topology.json \
   && mkdir db && touch db/node.socket
 
+RUN chown -R debian:debian /opt
+
+USER debian
