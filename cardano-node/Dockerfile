@@ -4,6 +4,8 @@ MAINTAINER VIPER Staking Team (viperstakepool@gmail.com)
 
 USER root
 
+COPY ./cardano_tools /opt/cardano_tools
+
 # Update and install the required packages
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
   build-essential \
@@ -57,7 +59,6 @@ RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --tags \
   && git checkout tags/1.14.1 \
-  && cabal install cardano-node cardano-cli
 
 # Create node directories and download config files
 RUN mkdir node && cd node \
@@ -69,5 +70,9 @@ RUN mkdir node && cd node \
 RUN chown -R debian:debian /opt
 
 USER debian
+
+# Install cardano binaries and add to path
+RUN cabal install cardano-node cardano-cli
+RUN echo "export PATH=$PATH:~/.cabal/bin" >> /home/debian/.zshrc
 
 CMD ["tmux"]

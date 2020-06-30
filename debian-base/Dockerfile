@@ -1,7 +1,7 @@
 from debian:latest
 
 RUN apt update -y
-RUN apt install zsh wget git npm vim tmux -y
+RUN apt install zsh wget git npm vim tmux python3 python3-pip -y
 
 # Setup default user environment
 RUN groupadd -r debian && useradd --no-log-init -r -g debian debian
