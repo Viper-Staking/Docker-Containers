@@ -3,4 +3,4 @@
 	url = ../../william-marchetto/shared-terminal-settings.git
 [submodule "cardano-node/cardano-tools"]
 	path = cardano-node/cardano-tools
-	url = git@gitlab.com:viper-staking/cardano-tools.git
+	url = ../cardano-tools.git
