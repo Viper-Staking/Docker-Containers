@@ -30,3 +30,5 @@ RUN curl -sSLO https://github.com/input-output-hk/jormungandr/releases/download/
 RUN chown -R debian:debian /opt
 
 USER debian
+
+CMD ["tmux"]

@@ -69,3 +69,5 @@ RUN mkdir node && cd node \
 RUN chown -R debian:debian /opt
 
 USER debian
+
+CMD ["tmux"]

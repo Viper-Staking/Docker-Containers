@@ -23,5 +23,3 @@ RUN cp /home/debian/dotfiles/monokai.vim /home/debian/.vim/colors
 RUN git clone https://github.com/scrooloose/nerdtree.git /home/debian/.vim/bundle/nerdtree
 RUN npm install -g spaceship-prompt
 RUN git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
-CMD ["tmux"]
