@@ -4,7 +4,7 @@ MAINTAINER VIPER Staking Team (viperstakepool@gmail.com)
 
 USER root
 
-COPY ./cardano_tools /opt/cardano_tools
+COPY ./cardano-tools /opt/cardano-tools
 
 # Update and install the required packages
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
