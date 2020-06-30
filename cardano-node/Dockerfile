@@ -58,7 +58,7 @@ RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.ta
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --tags \
-  && git checkout tags/1.14.1 \
+  && git checkout tags/1.14.1
 
 # Create node directories and download config files
 RUN mkdir node && cd node \
