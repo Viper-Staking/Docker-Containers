@@ -1,10 +1,5 @@
-FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
-# FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
+FROM debian:latest
 MAINTAINER VIPER Staking Team (viperstakepool@gmail.com)
-
-USER root
-
-COPY ./cardano-tools /opt/cardano-tools
 
 # Update and install the required packages
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
@@ -52,27 +47,34 @@ RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.ta
   && cd ghc-8.6.5 \
   && ./configure \
   && make install \
-  && cd /opt
+  && cabal update 
 
 # Install cardano node
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --tags \
-  && git checkout tags/1.14.1
+  && git checkout tags/1.14.1 \
+  && cabal install cardano-node cardano-cli
 
-# Create node directories and download config files
-RUN cd /opt && mkdir node && cd node \
-  && wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-config.json \
-  && wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-genesis.json \
-  && wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-topology.json \
-  && mkdir db && touch db/node.socket
+# Build the final stage and copy the build artifacts from the previous stage.
+FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
+COPY ./cardano-tools /opt/cardano-tools
+COPY --from=0 /usr/local/lib/libsodium* /usr/local/lib/
+COPY --from=0 /root/.cabal/bin/cardano-cli /usr/local/bin/
+COPY --from=0 /root/.cabal/bin/cardano-node /usr/local/bin/
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-RUN chown -R debian:debian /opt
-
+# Create a directory for the node config files and blockchain database. 
+# This needs to be mounted to a host volume on container run.
 USER debian
+RUN mkdir $HOME/cardano-node/
 
-# Install cardano binaries and add to path
-RUN cd /opt/cardano-node && cabal update && cabal install cardano-node cardano-cli
-RUN echo "export PATH=$PATH:~/.cabal/bin" >> /home/debian/.zshrc
+# Use this variable to run a relay or pool node.
+# It is accessed by the run script.
+ARG mode="RELAY"
+ENV CNODE_MODE=${mode}
 
-CMD ["tmux"]
+# Copy the script which will start the node.
+COPY run-cardano-node.sh /usr/local/bin/
+CMD ["run-cardano-node.sh"]
