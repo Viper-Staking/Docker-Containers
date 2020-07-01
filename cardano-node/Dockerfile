@@ -70,11 +70,6 @@ ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 USER debian
 RUN mkdir $HOME/cardano-node/
 
-# Use this variable to run a relay or pool node.
-# It is accessed by the run script.
-ARG mode="RELAY"
-ENV CNODE_MODE=${mode}
-
 # Copy the script which will start the node.
 COPY run-cardano-node.sh /usr/local/bin/
 CMD ["run-cardano-node.sh"]

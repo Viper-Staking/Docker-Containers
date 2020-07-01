@@ -1,16 +1,18 @@
-if [[ -z "${CNODE_MODE}" ]]; then
-  CARDANO_NODE_MODE="relay"
+if [ -z $1 ]; then
+  CNODE_MODE="relay"
 else
-  CARDANO_NODE_MODE="${CNODE_MODE}"
+  CNODE_MODE=$1
 fi
 
-if [[ -z "${CNODE_PORT}" ]]; then
+if [ -z $2 ]; then
   CNODE_PORT=4444
+else
+  CNODE_PORT=$2
 fi
 
 HOST_ADDR="0.0.0.0"
 
-if [ "$CARDANO_NODE_MODE" == "relay" ]; then
+if [ "$CNODE_MODE" = "relay" ]; then
    cardano-node run \
        --database-path $HOME/cardano-node/db/ \
        --socket-path $HOME/cardano-node/db/node.socket \
@@ -18,7 +20,7 @@ if [ "$CARDANO_NODE_MODE" == "relay" ]; then
        --host-addr $HOST_ADDR \
        --config $HOME/cardano-node/config.json \
        --topology $HOME/cardano-node/topology.json
-elif [ "$CARDANO_NODE_MODE" == "pool" ]; then
+elif [ "$CNODE_MODE" = "pool" ]; then
     cardano-node run \
         --database-path $HOME/cardano-node/db/ \
         --socket-path $HOME/cardano-node/db/node.socket \
