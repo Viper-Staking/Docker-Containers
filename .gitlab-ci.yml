@@ -22,6 +22,7 @@ remove-submodules:
     script:
         # Remove submodule dir (workaround for GitLab bug)
         - if [ -d debian-base/shared-terminal-settings ]; then rm -rf debian-base/shared-terminal-settings; fi
+        - if [ -d cardano-node/cardano-tools ]; then rm -rf cardano-node/cardano-tools; fi
 
 debian-base:
     <<: *template
@@ -31,13 +32,15 @@ debian-base:
         GIT_SUBMODULE_STRATEGY: recursive
     before_script:
         - ls $CONTAINER_NAME/shared-terminal-settings
-    after_script:
 
 cardano-node:
     <<: *template
     stage: node
     variables:
         CONTAINER_NAME: cardano-node
+        GIT_SUBMODULE_STRATEGY: recursive
+    before_script:
+        - ls $CONTAINER_NAME/cardano-tools
 
 jormungandr:
     <<: *template
