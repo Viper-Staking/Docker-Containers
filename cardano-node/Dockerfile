@@ -72,4 +72,4 @@ RUN mkdir $HOME/cardano-node/
 
 # Copy the script which will start the node.
 COPY run-cardano-node.sh /usr/local/bin/
-CMD ["run-cardano-node.sh"]
+ENTRYPOINT ["run-cardano-node.sh"]
