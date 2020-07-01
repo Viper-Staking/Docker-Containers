@@ -52,7 +52,8 @@ RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.ta
   && cd ghc-8.6.5 \
   && ./configure \
   && make install \
-  && cabal update
+  && cabal update \
+  && cd /opt
 
 # Install cardano node
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
@@ -61,7 +62,7 @@ RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && git checkout tags/1.14.1
 
 # Create node directories and download config files
-RUN mkdir node && cd node \
+RUN cd /opt && mkdir node && cd node \
   && wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-config.json \
   && wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-genesis.json \
   && wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-topology.json \
@@ -72,7 +73,7 @@ RUN chown -R debian:debian /opt
 USER debian
 
 # Install cardano binaries and add to path
-RUN cd ../cardano-node && cabal install cardano-node cardano-cli
+RUN cd /opt/cardano-node && cabal install cardano-node cardano-cli
 RUN echo "export PATH=$PATH:~/.cabal/bin" >> /home/debian/.zshrc
 
 CMD ["tmux"]
