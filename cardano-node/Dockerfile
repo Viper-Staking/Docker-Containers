@@ -52,7 +52,6 @@ RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.ta
   && cd ghc-8.6.5 \
   && ./configure \
   && make install \
-  && cabal update \
   && cd /opt
 
 # Install cardano node
@@ -73,7 +72,7 @@ RUN chown -R debian:debian /opt
 USER debian
 
 # Install cardano binaries and add to path
-RUN cd /opt/cardano-node && cabal install cardano-node cardano-cli
+RUN cd /opt/cardano-node && cabal update && cabal install cardano-node cardano-cli
 RUN echo "export PATH=$PATH:~/.cabal/bin" >> /home/debian/.zshrc
 
 CMD ["tmux"]
