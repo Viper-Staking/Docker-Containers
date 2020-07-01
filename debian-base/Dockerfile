@@ -1,8 +1,8 @@
 from debian:latest
 
-RUN apt update \
-  && apt upgrade -y \
-  && apt install -y \
+RUN apt-get update \
+  && apt-get upgrade -y \
+  && apt-get install -y \
     zsh \
     wget \
     git \
@@ -10,7 +10,8 @@ RUN apt update \
     vim \
     tmux \
     python3 \
-    python3-pip
+    python3-pip \
+  && rm -rf /var/lib/apt/lists/*
 
 # Setup default user environment
 RUN groupadd -r debian \
