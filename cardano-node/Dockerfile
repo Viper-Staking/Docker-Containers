@@ -72,7 +72,7 @@ RUN chown -R debian:debian /opt
 USER debian
 
 # Install cardano binaries and add to path
-RUN cabal install cardano-node cardano-cli
+RUN cd ../cardano-node && cabal install cardano-node cardano-cli
 RUN echo "export PATH=$PATH:~/.cabal/bin" >> /home/debian/.zshrc
 
 CMD ["tmux"]
