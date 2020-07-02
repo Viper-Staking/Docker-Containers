@@ -14,9 +14,11 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 # Setup default user environment
-ARG USERNAME=lovelace
-RUN groupadd -r $USERNAME \
- && useradd --no-log-init -r -g $USERNAME $USERNAME \
+ARG USERNAME="lovelace"
+ARG USERID="1000"
+ARG GROUPID="1024"
+RUN groupadd -g $GROUPID -r $USERNAME \
+ && useradd --no-log-init -r --gid $GROUPID -u $USERID $USERNAME \
  && mkdir /home/$USERNAME
 COPY ./shared-terminal-settings/dotfiles /home/${USERNAME}/dotfiles
 COPY ./zshrc /home/${USERNAME}/.zshrc
