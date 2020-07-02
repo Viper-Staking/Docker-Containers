@@ -12,7 +12,11 @@ else
   CNODE_PORT=$2
 fi
 
-HOST_ADDR="0.0.0.0"
+if [ -z $3 ]; then
+  HOST_ADDR="0.0.0.0"
+else
+  HOST_ADDR=$3
+fi
 
 if [ "$CNODE_MODE" = "relay" ]; then
    cardano-node run \
