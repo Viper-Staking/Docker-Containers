@@ -67,7 +67,7 @@ ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Create a directory for the node config files and blockchain database. 
 # This needs to be mounted to a host volume on container run.
-USER debian
+USER lovelace
 RUN mkdir $HOME/cardano-node/
 
 # Copy the script which will start the node.

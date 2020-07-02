@@ -27,8 +27,8 @@ RUN curl -sSLO https://github.com/input-output-hk/jormungandr/releases/download/
 #  && wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-topology.json \
 #  && mkdir db && touch db/node.socket
 
-RUN chown -R debian:debian /opt
-
-USER debian
+ARG USER=lovelace
+RUN chown -R $USER:$USER /opt
+USER $USER
 
 CMD ["tmux"]
