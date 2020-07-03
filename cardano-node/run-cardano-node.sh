@@ -34,7 +34,7 @@ elif [ "$CNODE_MODE" = "pool" ]; then
     --port $CNODE_PORT \
     --config $HOME/cardano-node/config.json \
     --topology $HOME/cardano-node/topology.json \
-    --shelley-kes-key $HOME/cardano-node/kes.skey \
-    --shelley-vrf-key $HOME/cardano-node/vrf.skey \
-    --shelley-operational-certificate  $HOME/cardano-node/node.cert
+    --shelley-kes-key $HOME/cardano-node/pool_kes.skey \
+    --shelley-vrf-key $HOME/cardano-node/pool_vrf.skey \
+    --shelley-operational-certificate  $HOME/cardano-node/pool.cert
 fi
