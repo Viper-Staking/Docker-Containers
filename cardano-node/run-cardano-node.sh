@@ -19,22 +19,22 @@ else
 fi
 
 if [ "$CNODE_MODE" = "relay" ]; then
-   cardano-node run \
-       --database-path $HOME/cardano-node/db/ \
-       --socket-path $HOME/cardano-node/db/node.socket \
-       --port $CNODE_PORT \
-       --host-addr $HOST_ADDR \
-       --config $HOME/cardano-node/config.json \
-       --topology $HOME/cardano-node/topology.json
+  cardano-node run \
+    --database-path $HOME/cardano-node/db/ \
+    --socket-path $HOME/cardano-node/db/node.socket \
+    --port $CNODE_PORT \
+    --host-addr $HOST_ADDR \
+    --config $HOME/cardano-node/config.json \
+    --topology $HOME/cardano-node/topology.json
 elif [ "$CNODE_MODE" = "pool" ]; then
-    cardano-node run \
-        --database-path $HOME/cardano-node/db/ \
-        --socket-path $HOME/cardano-node/db/node.socket \
-        --host-addr $HOST_ADDR \
-        --port $CNODE_PORT \
-        --config $HOME/cardano-node/config.json \
-        --topology $HOME/cardano-node/topology.json \
-        --shelley-kes-key $HOME/cardano-node/kes.skey \
-        --shelley-vrf-key $HOME/cardano-node/vrf.skey \
-       --shelley-operational-certificate  $HOME/cardano-node/node.cert
+  cardano-node run \
+    --database-path $HOME/cardano-node/db/ \
+    --socket-path $HOME/cardano-node/db/node.socket \
+    --host-addr $HOST_ADDR \
+    --port $CNODE_PORT \
+    --config $HOME/cardano-node/config.json \
+    --topology $HOME/cardano-node/topology.json \
+    --shelley-kes-key $HOME/cardano-node/kes.skey \
+    --shelley-vrf-key $HOME/cardano-node/vrf.skey \
+    --shelley-operational-certificate  $HOME/cardano-node/node.cert
 fi
