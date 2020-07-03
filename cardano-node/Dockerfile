@@ -50,10 +50,11 @@ RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.ta
   && cabal update 
 
 # Install cardano node
+ARG TAG=1.14.2
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --tags \
-  && git checkout tags/1.14.1 \
+  && git checkout tags/$TAG \
   && cabal install cardano-node cardano-cli
 
 # Build the final stage and copy the build artifacts from the previous stage.
