@@ -36,4 +36,6 @@ RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/t
   && cp /home/${USERNAME}/dotfiles/monokai.vim /home/${USERNAME}/.vim/colors \
   && git clone https://github.com/scrooloose/nerdtree.git /home/${USERNAME}/.vim/bundle/nerdtree \
   && npm install -g spaceship-prompt \
-  && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
+  && git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim \
+  && vim +PluginInstall +qall
