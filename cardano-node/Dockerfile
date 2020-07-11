@@ -72,5 +72,13 @@ USER lovelace
 RUN mkdir $HOME/cardano-node/
 
 # Copy the script which will start the node.
-COPY run-cardano-node.sh /usr/local/bin/
-ENTRYPOINT ["/usr/local/bin/run-cardano-node.sh"]
+#COPY run-cardano-node.sh /usr/local/bin/
+
+# Default arguments to cardano-node
+CMD ["--database-path", "$HOME/cardano-node/db/", \
+     "--socket-path", "$HOME/cardano-node/db/node.socket", \
+     "--port", "4444", \
+     "--host-addr", "0.0.0.0", \
+     "--config", "$HOME/cardano-node/config.json", \
+     "--topology", "$HOME/cardano-node/topology.json"]
+ENTRYPOINT ["cardano-node run"]
