@@ -4,7 +4,7 @@
 This container runs with `ENTRYPOINT cardano-node`. A `CMD` statement provides default arguments,
 which runs a relay node with the following parameters:
 
-* Base path (for database and config paths): '$HOME/cardano-node'
+* Base path (for database and config paths): `$HOME/cardano-node`
 * Port: `4444`
 * Host address: `0.0.0.0`
 
@@ -38,6 +38,7 @@ docker run cardano-node \
     --port 4444 \
     --host-addr "0.0.0.0" \
     --config $HOME/cardano-node/config.json \
+```
 
 ## Alternate configuration (shell entrypoint)
 Below is an example on overriding the entrypoint to enter the container in a shell:
