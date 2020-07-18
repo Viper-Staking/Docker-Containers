@@ -83,3 +83,5 @@ USER ${USERNAME}
 # Create a directory for the node config files and blockchain database. 
 # This needs to be mounted to a host volume on container run.
 RUN mkdir $HOME/cardano-node/
+
+ENTRYPOINT ["cardano-node"] 
