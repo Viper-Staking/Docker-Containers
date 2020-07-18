@@ -71,8 +71,6 @@ ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 USER lovelace
 RUN mkdir $HOME/cardano-node/
 
-# Copy the script which will start the node.
-#COPY run-cardano-node.sh /usr/local/bin/
-
-# Default arguments to cardano-node
+# Set cardano-node as the entrypoint and by default just print the version.
 ENTRYPOINT ["cardano-node"]
+CMD ["--version"]

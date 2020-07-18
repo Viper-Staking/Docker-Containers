@@ -84,4 +84,6 @@ USER ${USERNAME}
 # This needs to be mounted to a host volume on container run.
 RUN mkdir $HOME/cardano-node/
 
-ENTRYPOINT ["cardano-node"] 
+# Set cardano-node as the entrypoint and by default just print the version.
+ENTRYPOINT ["cardano-node"]
+CMD ["--version"]
