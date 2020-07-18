@@ -52,16 +52,16 @@ container or from a local installation. The first argument accepts a command pre
 which specifies where to execute cardano-node
 
 ### Docker execution
-''' bash
+``` bash
 export CMD="docker run --mount type=bind,source=$PWD,target=/home/lovelace/cardano-node/ registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
 ./run-cardano-node.sh $CMD
-'''
+```
 
 ### Local execution
-''' bash
+``` bash
 export CMD="/usr/local/bin/cardano-node"
 ./run-cardano-node.sh $CMD
-'''
+```
 
 ## Required files
 * Node configuration [files](https://hydra.iohk.io/build/3462018/download/1/index.html)
