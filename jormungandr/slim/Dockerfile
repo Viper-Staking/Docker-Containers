@@ -22,9 +22,24 @@ RUN git clone --recurse-submodules https://github.com/input-output-hk/jormungand
   && cargo install --locked --path jcli
 
 # Create the final container and copy in the executables.
-FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
+FROM debian:buster-slim
 COPY --from=build /usr/local/cargo/bin/jormungandr /usr/local/bin/
 COPY --from=build /usr/local/cargo/bin/jcli /usr/local/bin/
+
+# Setup the user and group for sharing folders with the host.
+ARG USERNAME="lovelace"
+ARG USERID="1000"
+ARG GROUPID="1024"
+RUN groupadd -g $GROUPID -r $USERNAME \
+  && useradd --no-log-init -r --gid $GROUPID -u $USERID $USERNAME \
+  && mkdir /home/$USERNAME \
+  && chown -R ${USERNAME}:${GROUPID} /home/${USERNAME} \
+  && echo ${USERNAME}:lovelace | chpasswd
+USER ${USERNAME}
+
+# Create a directory for the node config files and blockchain database.
+# This can be mounted to a host volume when the container is run.
+RUN mkdir $HOME/jormungandr-node/
 
 # Copy or clone any tools needed here.
 
