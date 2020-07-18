@@ -50,7 +50,7 @@ RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.ta
   && cabal update 
 
 # Install cardano node
-ARG TAG=1.14.2
+ARG TAG=1.15.1
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --tags \
@@ -75,10 +75,4 @@ RUN mkdir $HOME/cardano-node/
 #COPY run-cardano-node.sh /usr/local/bin/
 
 # Default arguments to cardano-node
-CMD ["--database-path", "$HOME/cardano-node/db/", \
-     "--socket-path", "$HOME/cardano-node/db/node.socket", \
-     "--port", "4444", \
-     "--host-addr", "0.0.0.0", \
-     "--config", "$HOME/cardano-node/config.json", \
-     "--topology", "$HOME/cardano-node/topology.json"]
-ENTRYPOINT ["cardano-node run"]
+ENTRYPOINT ["cardano-node"]
