@@ -1,5 +1,5 @@
-FROM debian:latest
-MAINTAINER VIPER Staking Team (viperstakepool@gmail.com)
+FROM debian:latest AS build
+LABEL maintainer="VIPER Staking Team (viperstakepool@gmail.com)"
 
 # Update and install the required packages
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
@@ -67,20 +67,21 @@ RUN cd /root \
 
 # Build the final stage and copy the build artifacts from the previous stage.
 FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
-COPY ./cardano-tools /opt/cardano-tools
-COPY --from=0 /usr/local/lib/libsodium* /usr/local/lib/
-COPY --from=0 /root/.cabal/bin/cardano-cli /usr/local/bin/
-COPY --from=0 /root/.cabal/bin/cardano-node /usr/local/bin/
-COPY --from=0 /usr/local/bin/node_exporter /usr/local/bin
+COPY --from=build /usr/local/lib/libsodium* /usr/local/lib/
+COPY --from=build /root/.cabal/bin/cardano-cli /usr/local/bin/
+COPY --from=build /root/.cabal/bin/cardano-node /usr/local/bin/
+COPY --from=build /usr/local/bin/node_exporter /usr/local/bin
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+# Copy over other resources from the build context.
+COPY ./cardano-tools /opt/cardano-tool
+COPY entrypoint.sh /usr/local/bin/
 
 # Create a directory for the node config files and blockchain database. 
 # This needs to be mounted to a host volume on container run.
 USER lovelace
 RUN mkdir $HOME/cardano-node/
-
-COPY entrypoint.sh /usr/local/bin/
 
 # Set cardano-node as the entrypoint and by default just print the version.
 ENTRYPOINT ["entrypoint.sh"]
