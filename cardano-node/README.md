@@ -70,14 +70,24 @@ export CMD="/usr/local/bin/cardano-node"
 ```
 
 ## Required files
-* Node configuration [files](https://hydra.iohk.io/build/3462018/download/1/index.html)
+* Node configuration files (latest files [here](https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html))
   * config.json
   * topology.json
-  * shelley_testnet-shelley-genesis.json
+  * genesis.json
+
+These files are different depending on the network (e.g., testnet vs. mainnet) and may be fetched automatically using the provided `get_latest_config_files.sh` script.
 
 ## Monitor node with prometheus
 
-1. Pull prometheus docker container:
+0. Ensure the node has been updated to enable prometheus by adding the following to the `config.json` file:
+
+```
+hasPrometheus:
+   - "0.0.0.0"
+   - 12789
+```
+
+1. Pull prometheus docker container from [Dockerhub](https://hub.docker.com/r/prom/prometheus):
 ``` bash
 docker pull prom/prometheus
 ```
