@@ -1,5 +1,14 @@
 # cardano-node container
 
+## Required files
+The steps below require cardano node configuration files in order to connect to the blockchain. These files can be downloaded [here](https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html). 
+  * config.json
+  * topology.json
+  * genesis.json
+
+These files are different depending on the network (e.g., testnet vs. mainnet) and may be fetched automatically using the provided `get_latest_config_files.sh` script.
+
+
 ## Default configuration (cardano-node binary)
 This container runs with `ENTRYPOINT cardano-node`. A `CMD` statement provides a default
 argument if no arguments are provided when running the container. This will simply
@@ -51,7 +60,7 @@ which specifies where to execute cardano-node
 
 ### Docker execution
 ``` bash
-export CMD="docker run --mount type=bind,source=$PWD,target=/home/lovelace/cardano-node/ -p 9100:9100 -p 12798:12798 registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
+export CMD="docker run --mount type=bind,source=$PWD/config,target=/home/lovelace/cardano-node/ -p 9100:9100 -p 12798:12798 registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
 ./run-cardano-node.sh $CMD
 ```
 
@@ -68,14 +77,6 @@ Use this to run cardano-node from a local cardano installation (or to run cardan
 export CMD="/usr/local/bin/cardano-node"
 ./run-cardano-node.sh $CMD
 ```
-
-## Required files
-* Node configuration files (latest files [here](https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html))
-  * config.json
-  * topology.json
-  * genesis.json
-
-These files are different depending on the network (e.g., testnet vs. mainnet) and may be fetched automatically using the provided `get_latest_config_files.sh` script.
 
 ## Monitor node with prometheus
 
