@@ -82,6 +82,10 @@ RUN mkdir $HOME/cardano-node/
 
 COPY entrypoint.sh /usr/local/bin/
 
+# Expose prometheus monitoring ports
+EXPOSE 9100
+EXPOSE 12798
+
 # Set cardano-node as the entrypoint and by default just print the version.
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["--version"]

@@ -1,4 +1,14 @@
-scrape_configs:
-  - job_name: 'node'
-    static_configs:
-      - targets: ['localhost:9100']
+ global:
+   scrape_interval:     15s
+   external_labels:
+     monitor: 'cardano-node-monitor'
+
+ scrape_configs:
+   - job_name: 'cardano' # To scrape data from the cardano node
+     scrape_interval: 5s
+     static_configs:
+       - targets: ['172.17.0.2:12798']
+   - job_name: 'node' # To scrape data from a node exporter to monitor your linux host metrics.
+     scrape_interval: 5s
+     static_configs:
+       - targets: ['172.17.0.2:9100']

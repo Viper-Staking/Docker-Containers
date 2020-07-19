@@ -51,7 +51,7 @@ which specifies where to execute cardano-node
 
 ### Docker execution
 ``` bash
-export CMD="docker run --mount type=bind,source=$PWD,target=/home/lovelace/cardano-node/ -p 9100 registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
+export CMD="docker run --mount type=bind,source=$PWD,target=/home/lovelace/cardano-node/ -p 9100:9100 -p 12798:12798 registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
 ./run-cardano-node.sh $CMD
 ```
 
@@ -77,6 +77,14 @@ export CMD="/usr/local/bin/cardano-node"
 
 ## Monitor node with prometheus
 
+0. Ensure the node has been updated to enable prometheus by adding the following to the `config.json` file:
+``` bash
+"hasPrometheus": [
+  "0.0.0.0",
+  12798
+]
+```
+
 1. Pull prometheus docker container:
 ``` bash
 docker pull prom/prometheus
@@ -95,5 +103,3 @@ docker run \
     prom/prometheus
 ```
 5. Access the prometheus web UI at `<container IP>:9090/graph`
-
-**NOTE:** Docker for Mac does not allow accessing containers from the host machine. You will not be able to access the web UI if running prometheus in docker from a Mac.
