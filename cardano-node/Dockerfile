@@ -57,12 +57,21 @@ RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && git checkout tags/$TAG \
   && cabal install cardano-node cardano-cli
 
+# Install Prometheus Node Exporter
+ARG VERSION=1.0.1
+ARG DIRNAME="node_exporter-$VERSION.linux-amd64"
+RUN cd /root \
+  && wget https://github.com/prometheus/node_exporter/releases/download/v$VERSION/$DIRNAME.tar.gz \
+  && tar xvfz $DIRNAME.tar.gz \
+  && mv $DIRNAME/node_exporter /usr/local/bin
+
 # Build the final stage and copy the build artifacts from the previous stage.
 FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
 COPY ./cardano-tools /opt/cardano-tools
 COPY --from=0 /usr/local/lib/libsodium* /usr/local/lib/
 COPY --from=0 /root/.cabal/bin/cardano-cli /usr/local/bin/
 COPY --from=0 /root/.cabal/bin/cardano-node /usr/local/bin/
+COPY --from=0 /usr/local/bin/node_exporter /usr/local/bin
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
@@ -71,6 +80,8 @@ ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 USER lovelace
 RUN mkdir $HOME/cardano-node/
 
+COPY entrypoint.sh /usr/local/bin/
+
 # Set cardano-node as the entrypoint and by default just print the version.
-ENTRYPOINT ["cardano-node"]
+ENTRYPOINT ["entrypoint.sh"]
 CMD ["--version"]
