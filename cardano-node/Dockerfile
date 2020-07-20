@@ -2,7 +2,7 @@ FROM debian:latest AS build
 LABEL maintainer="VIPER Staking Team (viperstakepool@gmail.com)"
 
 # Update and install the required packages
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+RUN apt-get update && apt-get install -y \
   build-essential \
   pkg-config \
   libffi-dev \
