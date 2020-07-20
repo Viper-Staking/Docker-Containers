@@ -1,18 +1,9 @@
 # cardano-node container
 
-## Required files
-The steps below require cardano node configuration files in order to connect to the blockchain. These files can be downloaded [here](https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html). 
-  * config.json
-  * topology.json
-  * genesis.json
-
-These files are different depending on the network (e.g., testnet vs. mainnet) and may be fetched automatically using the provided `get_latest_config_files.sh` script.
-
-
 ## Default configuration (cardano-node binary)
-This container runs with `ENTRYPOINT cardano-node`. A `CMD` statement provides a default
-argument if no arguments are provided when running the container. This will simply
-print the cardano-node version.
+This container runs with `ENTRYPOINT cardano-node`. A `CMD` statement provides a
+default argument if no arguments are provided when running the container. This 
+will simply print the cardano-node version.
 
 The following command will run the container in this configuration:
 ``` bash
@@ -20,8 +11,8 @@ docker run registry.gitlab.com/viper-staking/docker-containers/cardano-node:late
 ```
 
 ## Alternate configuration (block producing node)
-Below is an example on overriding the default CMD arguments to run cardano-node as a block
-producing node:
+Below is an example on overriding the default CMD arguments to run cardano-node 
+as a block producing node:
 ``` bash
 docker run registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest \
     --database-path $HOME/cardano-node/db/ \
@@ -35,8 +26,8 @@ docker run registry.gitlab.com/viper-staking/docker-containers/cardano-node:late
 ```
 
 ## Alternate configuration (relay node)
-Below is an example on overriding the default CMD arguments to run cardano-node as a relay
-node:
+Below is an example on overriding the default CMD arguments to run cardano-node 
+as a relay node:
 ``` bash
 docker run registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest \
     --database-path $HOME/cardano-node/db/ \
@@ -47,22 +38,27 @@ docker run registry.gitlab.com/viper-staking/docker-containers/cardano-node:late
 ```
 
 ## Alternate configuration (shell entrypoint)
-Below is an example on overriding the entrypoint to enter the container in a shell. This configuration boots the container
-into a ZSH shell so that the user can interact with the container and run any desired commands. Use this for debugging:
+Below is an example on overriding the entrypoint to enter the container in a 
+shell. This configuration boots the container into a ZSH shell so that the user
+can interact with the container and run any desired commands. Use this for
+debugging:
 ``` bash
 docker run -it --entrypoint /usr/bin/zsh registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest
 ```
 
 ## Running with run-cardano-node script
-`run-cardano-node.sh` is provided to simplify running cardano-node either via the docker 
-container or from a local installation. The first argument accepts a command prefix string
-which specifies where to execute cardano-node
+The script `run-cardano-node.sh` is provided to simplify running the 
+cardano-node either via the docker container or from a local installation. The 
+first argument accepts a command prefix string which specifies where to execute cardano-node so it may be used with the container as:
 
 ### Docker execution
 ``` bash
-export CMD="docker run --mount type=bind,source=$PWD/config,target=/home/lovelace/cardano-node/ -p 9100:9100 -p 12798:12798 registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
+export CMD="docker run --mount type=bind,source=$PWD,target=/home/lovelace/cardano-node/ -p 9100:9100 -p 12798:12798 registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
 ./run-cardano-node.sh $CMD
 ```
+
+The `run-cardano-node.sh` script assumes the location of the node configuration 
+files and may need to be adjuster per your setup.
 
 You can open a shell in the running container with the following command:
 ``` bash
@@ -72,20 +68,32 @@ docker exec -it <container_id> /usr/bin/zsh
 You can get the ID of the running container by running `docker ps`.
 
 ### Local execution
-Use this to run cardano-node from a local cardano installation (or to run cardano-node when the docker container is run with a shell:
+Use this to run cardano-node from a local cardano installation (or to run 
+cardano-node when inside the docker container via shell):
 ``` bash
 export CMD="/usr/local/bin/cardano-node"
 ./run-cardano-node.sh $CMD
 ```
 
+## Required files
+* Node configuration files (latest files [here](https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html))
+  * config.json
+  * topology.json
+  * genesis.json
+
+These files are different depending on the network (e.g., testnet vs. mainnet)
+and may be fetched automatically using the provided `get_latest_config_files.sh`
+script.
+
 ## Monitor node with prometheus
 
-0. Ensure the node has been updated to enable prometheus by adding the following to the `config.json` file:
-``` bash
-"hasPrometheus": [
-  "0.0.0.0",
-  12798
-]
+0. Ensure the node has been updated to enable prometheus by adding the following
+to the `config.json` file:
+
+```
+hasPrometheus:
+   - "0.0.0.0"
+   - 12789
 ```
 
 1. Pull prometheus docker container from [Dockerhub](https://hub.docker.com/r/prom/prometheus):
@@ -106,3 +114,9 @@ docker run \
     prom/prometheus
 ```
 5. Access the prometheus web UI at `<container IP>:9090/graph`
+
+## The `slim` tag
+
+A `slim` version of the container is also provided that has no extra tools 
+installed for minimal container size. This may be useful when merely using the 
+container as a `cardano-node` executable.
