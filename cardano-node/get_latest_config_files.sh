@@ -2,20 +2,20 @@ BASELINK="https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-f
 
 # Shelley Testnet
 echo "Downloading shelley_testnet files..."
-curl -sSL0 ${BASELINK}shelley_testnet-config.json -o config/shelley_testnet-config.json
-curl -sSL0 ${BASELINK}shelley_testnet-shelley-genesis.json -o config/shelley_testnet-shelley-genesis.json
-curl -sSL0 ${BASELINK}shelley_testnet-topology.json -o config/shelley_testnet-topology.json
+curl -sSL ${BASELINK}shelley_testnet-config.json -o config/shelley_testnet-config.json
+curl -sSL ${BASELINK}shelley_testnet-shelley-genesis.json -o config/shelley_testnet-shelley-genesis.json
+curl -sSL ${BASELINK}shelley_testnet-topology.json -o config/shelley_testnet-topology.json
 
 # Mainnet Candidate
 echo "Downloading mainnet_candidate files..."
-curl -sSL0 ${BASELINK}mainnet_candidate-config.json -o config/mainnet_candidate-config.json
-curl -sSL0 ${BASELINK}mainnet_candidate-shelley-genesis.json -o config/mainnet_candidate-shelley-genesis.json
-curl -sSL0 ${BASELINK}mainnet_candidate-byron-genesis.json -o config/mainnet_candidate-byron-genesis.json
-curl -sSL0 ${BASELINK}mainnet_candidate-topology.json -o config/mainnet_candidate-topology.json
+curl -sSL ${BASELINK}mainnet_candidate-config.json -o config/mainnet_candidate-config.json
+curl -sSL ${BASELINK}mainnet_candidate-shelley-genesis.json -o config/mainnet_candidate-shelley-genesis.json
+curl -sSL ${BASELINK}mainnet_candidate-byron-genesis.json -o config/mainnet_candidate-byron-genesis.json
+curl -sSL ${BASELINK}mainnet_candidate-topology.json -o config/mainnet_candidate-topology.json
 
 # # Mainnet
 #echo "Downloading mainnet files..."
-# curl -sSL0 ${BASELINK}mainnet-config.json -o config/mainnet-config.json
-# curl -sSL0 ${BASELINK}mainnet-shelley-genesis.json -o config/mainnet-shelley-genesis.json
-# curl -sSL0 ${BASELINK}mainnet-byron-genesis.json -o config/mainnet-byron-genesis.json
-# curl -sSL0 ${BASELINK}mainnet-topology.json -o config/mainnet-topology.json
+# curl -sSL ${BASELINK}mainnet-config.json -o config/mainnet-config.json
+# curl -sSL ${BASELINK}mainnet-shelley-genesis.json -o config/mainnet-shelley-genesis.json
+# curl -sSL ${BASELINK}mainnet-byron-genesis.json -o config/mainnet-byron-genesis.json
+# curl -sSL ${BASELINK}mainnet-topology.json -o config/mainnet-topology.json
