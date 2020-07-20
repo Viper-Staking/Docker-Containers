@@ -1,5 +1,5 @@
 FROM rust:1.45-slim-buster AS build
-MAINTAINER VIPER Staking Team (viperstakepool@gmail.com)
+LABEL maintainer="VIPER Staking Team (viperstakepool@gmail.com)"
 
 # Install any needed packages
 RUN apt-get update && apt-get install -y --no-install-recommends \

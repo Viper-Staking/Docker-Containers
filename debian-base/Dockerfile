@@ -1,4 +1,5 @@
-from debian:latest
+FROM debian:latest
+LABEL maintainer="VIPER Staking Team (viperstakepool@gmail.com)"
 
 RUN apt-get update \
  && apt-get upgrade -y \
