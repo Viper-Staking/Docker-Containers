@@ -6,7 +6,7 @@ Dockerized builds of the cardano full node software.
 
 The cardano-node container provides a ready to use build of the cardano-node
 software built from the source with all required dependencies. The `latest` tag
-also provided a develoment environment and node monitoring support via
+also provides a development environment and node monitoring support via
 prometheus. The `slim` tag provides a minimal install of the node only.
 
 See more information [here](./cardano-node/README.md).
@@ -21,12 +21,9 @@ The Jormungandr containers are similar to the cardano-node ones. Both a
 Join our [telegram channel](https://t.me/ViperTools) to get support and discuss
 potential upgrades or changes.
 
-If you find our tools useful, please consider buying us a beer!
+---
+Visit our [website](https://viperstaking.com) for information on our other open source Cardano tools. If you find our tools useful, please consider buying us a beer! :beer:
 
-```
-# ADA
-DdzFFzCqrhstZCw5CwyKLaDvna3Myfioi1LL4up4D5nn5q4QyyhEw5nLNs5g46sTaCarHJKtLwviL1s5Ed6mdRUhX2vBc6A8queoJMpF
+**ADA Wallet:** `DdzFFzCqrhstZCw5CwyKLaDvna3Myfioi1LL4up4D5nn5q4QyyhEw5nLNs5g46sTaCarHJKtLwviL1s5Ed6mdRUhX2vBc6A8queoJMpF`
 
-# BTC
-39sUg4DKBNHAFq5TeUJ8aiFGe7QpptifHE
-```
+**BTC Wallet:** `39sUg4DKBNHAFq5TeUJ8aiFGe7QpptifHE`
