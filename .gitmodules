@@ -1,6 +1,3 @@
 [submodule "debian-base/shared-terminal-settings"]
 	path = debian-base/shared-terminal-settings
 	url = ../../william-marchetto/shared-terminal-settings.git
-[submodule "cardano-node/cardano-tools"]
-	path = cardano-node/cardano-tools
-	url = ../cardano-tools.git
