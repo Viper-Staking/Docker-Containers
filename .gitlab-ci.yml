@@ -10,6 +10,7 @@ stages:
     image: docker
     only:
         - tags
+        - triggers
     tags:
         - docker
     script:
@@ -21,6 +22,9 @@ stages:
 
 remove-submodules:
     stage: setup
+    only:
+        - tags
+        - triggers
     script:
         # Remove submodule dir (workaround for GitLab bug)
         - if [ -d debian-base/shared-terminal-settings ]; then rm -rf debian-base/shared-terminal-settings; fi
