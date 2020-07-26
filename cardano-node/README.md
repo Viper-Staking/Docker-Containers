@@ -1,5 +1,11 @@
 # cardano-node container
 
+## Quickstart
+
+Follow our [quickstart guide](https://viperstaking.com/ada-tools/node-quickstart/) 
+to get a relay node up and running in less than 10 minutes! The following sections 
+provide other configuration examples.
+
 ## Default configuration (cardano-node binary)
 This container runs with `ENTRYPOINT cardano-node`. A `CMD` statement provides a
 default argument if no arguments are provided when running the container. This 
@@ -122,8 +128,5 @@ installed for minimal container size. This may be useful when merely using the
 container as a `cardano-node` executable.
 
 ---
-Visit our [website](https://viperstaking.com) for information on our other open source Cardano tools. If you find our tools useful, please consider buying us a beer! :beer:
 
-**ADA Wallet:** `DdzFFzCqrhstZCw5CwyKLaDvna3Myfioi1LL4up4D5nn5q4QyyhEw5nLNs5g46sTaCarHJKtLwviL1s5Ed6mdRUhX2vBc6A8queoJMpF`
-
-**BTC Wallet:** `39sUg4DKBNHAFq5TeUJ8aiFGe7QpptifHE`
+_Visit our [website](https://viperstaking.com) for information on our other open source Cardano tools. If you find our tools useful, please consider buying us a beer! :beer: [Contribute](https://viperstaking.com/ada-tools/contribute/)_
