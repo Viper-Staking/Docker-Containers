@@ -50,7 +50,7 @@ RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.ta
   && cabal update 
 
 # Install cardano node
-ARG TAG=1.15.1
+ARG TAG=1.18.0
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --tags \
@@ -75,15 +75,15 @@ ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Copy over other resources from the build context.
-COPY ./cardano-tools /opt/cardano-tool
 COPY entrypoint.sh /usr/local/bin/
 
 # Create a directory for the node config files and blockchain database. 
 # This needs to be mounted to a host volume on container run.
 USER lovelace
-RUN mkdir $HOME/cardano-node/
+RUN mkdir ${HOME}/cardano-node/
 
-COPY entrypoint.sh /usr/local/bin/
+# Clone the cardano-tools repo
+RUN git clone https://gitlab.com/viper-staking/cardano-tools.git/ ${HOME}/cardano-tools
 
 # Expose prometheus monitoring ports
 EXPOSE 9100
