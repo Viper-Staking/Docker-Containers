@@ -4,11 +4,35 @@
      monitor: 'cardano-node-monitor'
 
  scrape_configs:
-   - job_name: 'cardano' # To scrape data from the cardano node
+   - job_name: 'EU1_cardano_block' # To scrape data from the cardano node
      scrape_interval: 5s
      static_configs:
-       - targets: ['172.17.0.2:12798']
-   - job_name: 'node' # To scrape data from a node exporter to monitor your linux host metrics.
+       - targets: ['ec2-3-127-229-69.eu-central-1.compute.amazonaws.com:12798']
+   - job_name: 'EU1_cardano_relay' # To scrape data from the cardano node
      scrape_interval: 5s
      static_configs:
-       - targets: ['172.17.0.2:9100']
+       - targets: ['ec2-3-127-229-69.eu-central-1.compute.amazonaws.com:12799']
+   - job_name: 'EU1_node_block' # To scrape data from a node exporter to monitor your linux host metrics.
+     scrape_interval: 5s
+     static_configs:
+       - targets: ['ec2-3-127-229-69.eu-central-1.compute.amazonaws.com:9100']
+   - job_name: 'EU1_node_relay' # To scrape data from a node exporter to monitor your linux host metrics.
+     scrape_interval: 5s
+     static_configs:
+       - targets: ['ec2-3-127-229-69.eu-central-1.compute.amazonaws.com:9101']
+   - job_name: 'EU2_cardano_block' # To scrape data from the cardano node
+     scrape_interval: 5s
+     static_configs:
+       - targets: ['ec2-3-121-201-210.eu-central-1.compute.amazonaws.com:12798']
+   - job_name: 'EU2_cardano_relay' # To scrape data from the cardano node
+     scrape_interval: 5s
+     static_configs:
+       - targets: ['ec2-3-121-201-210.eu-central-1.compute.amazonaws.com:12799']
+   - job_name: 'EU2_node_block' # To scrape data from a node exporter to monitor your linux host metrics.
+     scrape_interval: 5s
+     static_configs:
+       - targets: ['ec2-3-121-201-210.eu-central-1.compute.amazonaws.com:9100']
+   - job_name: 'EU2_node_relay' # To scrape data from a node exporter to monitor your linux host metrics.
+     scrape_interval: 5s
+     static_configs:
+       - targets: ['ec2-3-121-201-210.eu-central-1.compute.amazonaws.com:9101']
