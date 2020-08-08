@@ -11,7 +11,7 @@ head -1 /etc/os-release
 cd ~
 
 # Update OS packages and install prerequisite packages
-sudo apt-get update && sudo apt-get upgrade && sudo apt-get install git
+sudo apt-get update && sudo apt-get upgrade && sudo apt-get install git curl
 
 # Download and install Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
