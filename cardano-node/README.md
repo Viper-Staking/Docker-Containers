@@ -59,7 +59,7 @@ first argument accepts a command prefix string which specifies where to execute 
 
 ### Docker execution
 ``` bash
-export CMD="docker run --mount type=bind,source=$PWD,target=/home/lovelace/cardano-node/ -p 9100:9100 -p 12798:12798 registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
+export CMD="docker run --mount type=bind,source=$PWD/config,target=/home/lovelace/cardano-node/ -p 9100:9100 -p 12798:12798 registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
 ./run-cardano-node.sh $CMD
 ```
 
