@@ -51,18 +51,21 @@ RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.ta
   && cabal update 
 
 # Build and install cardano-node
-ARG TAG=1.18.0
+ARG TAG=1.19.0
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --tags \
   && git checkout tags/$TAG \
-  && cabal install cardano-node cardano-cli
+  && cabal build all \
+  && mkdir /opt/bin/ \
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-node-$TAG/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-cli-$TAG/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
 
 # Build the final stage and copy the build artifacts from the previous stage.
 FROM debian:buster-slim
 COPY --from=build /usr/local/lib/libsodium.so* /usr/local/lib/
-COPY --from=build /root/.cabal/bin/cardano-cli /usr/local/bin/
-COPY --from=build /root/.cabal/bin/cardano-node /usr/local/bin/
+COPY --from=build /opt/bin/cardano-cli /usr/local/bin/
+COPY --from=build /opt/bin/cardano-node /usr/local/bin/
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 
 # Install required packages
