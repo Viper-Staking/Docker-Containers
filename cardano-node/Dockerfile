@@ -2,6 +2,7 @@ FROM debian:latest AS build
 LABEL maintainer="VIPER Staking Team (viperstakepool@gmail.com)"
 
 # Update and install the required packages
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
   build-essential \
   pkg-config \
@@ -50,12 +51,15 @@ RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.ta
   && cabal update 
 
 # Install cardano node
-ARG TAG=1.19.0
+ARG TAG=1.21.1
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --tags \
   && git checkout tags/$TAG \
-  && cabal build all
+  && cabal build all \
+  && mkdir /opt/bin/ \
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-node-$TAG/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-cli-$TAG/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
 
 # Install Prometheus Node Exporter
 ARG VERSION=1.0.1
@@ -68,8 +72,8 @@ RUN cd /root \
 # Build the final stage and copy the build artifacts from the previous stage.
 FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
 COPY --from=build /usr/local/lib/libsodium* /usr/local/lib/
-COPY --from=build /opt/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-node-1.19.0/x/cardano-node/build/cardano-node/cardano-node /usr/local/bin/
-COPY --from=build /opt/cardano-node/dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-cli-1.19.0/x/cardano-cli/build/cardano-cli/cardano-cli /usr/local/bin/
+COPY --from=build /opt/bin/cardano-cli /usr/local/bin/
+COPY --from=build /opt/bin/cardano-node /usr/local/bin/
 COPY --from=build /usr/local/bin/node_exporter /usr/local/bin
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
