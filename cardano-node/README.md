@@ -1,15 +1,11 @@
 # cardano-node container
 
-## Quickstart
+This project builds the cardano-node software from source inside a debian based docker container for rapid deployment to multiple nodes. The container also installs the Prometheus node exporter to support remote monotiring using [Prometheus](https://prometheus.io/).
 
-Follow our [quickstart guide](https://viperstaking.com/ada-tools/node-quickstart/) 
-to get a relay node up and running in less than 10 minutes! The following sections 
-provide other configuration examples.
+See the Dockerfile and build.sh script for more information.
 
 ## Default configuration (cardano-node binary)
-This container runs with `ENTRYPOINT cardano-node`. A `CMD` statement provides a
-default argument if no arguments are provided when running the container. This 
-will simply print the cardano-node version.
+This container runs with the `cardano-node` as the `ENTRYPOINT` (see inside the `entrypoint.sh` script). A `CMD` statement provides a default argument if no arguments are provided when running the container. This will simply print the cardano-node version.
 
 The following command will run the container in this configuration:
 ``` bash
@@ -52,80 +48,16 @@ debugging:
 docker run -it --entrypoint /usr/bin/zsh registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest
 ```
 
-## Running with run-cardano-node script
-The script `run-cardano-node.sh` is provided to simplify running the 
-cardano-node either via the docker container or from a local installation. The 
-first argument accepts a command prefix string which specifies where to execute cardano-node so it may be used with the container as:
-
-### Docker execution
-``` bash
-export CMD="docker run --mount type=bind,source=$PWD/config,target=/home/lovelace/cardano-node/ -p 9100:9100 -p 12798:12798 registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest"
-./run-cardano-node.sh $CMD
-```
-
-The `run-cardano-node.sh` script assumes the location of the node configuration 
-files and may need to be adjuster per your setup.
-
-You can open a shell in the running container with the following command:
-``` bash
-docker exec -it <container_id> /usr/bin/zsh
-```
-
-You can get the ID of the running container by running `docker ps`.
-
-### Local execution
-Use this to run cardano-node from a local cardano installation (or to run 
-cardano-node when inside the docker container via shell):
-``` bash
-export CMD="/usr/local/bin/cardano-node"
-./run-cardano-node.sh $CMD
-```
-
-## Required files
-* Node configuration files (latest files [here](https://hydra.iohk.io/job/Cardano/iohk-nix/cardano-deployment/latest-finished/download/1/index.html))
-  * config.json
-  * topology.json
-  * genesis.json
-
-These files are different depending on the network (e.g., testnet vs. mainnet)
-and may be fetched automatically using the provided `get_latest_config_files.sh`
-script.
-
-## Monitor node with prometheus
-
-0. Ensure the node has been updated to enable prometheus by adding the following
-to the `config.json` file:
-
-```
-hasPrometheus:
-   - "0.0.0.0"
-   - 12789
-```
-
-1. Pull prometheus docker container from [Dockerhub](https://hub.docker.com/r/prom/prometheus):
-``` bash
-docker pull prom/prometheus
-```
-
-2. Get the IP address of the node you'd like to monitor. If using docker, you can get the IP with:
-``` bash
-docker network inspect bridge
-```
-3. Modify prometheus.yml and change `localhost` to the container's IP address
-4. Run the prometheus container:
-``` bash
-docker run \
-    -p 9090:9090 \
-    -v $PWD/prometheus.yml:/etc/prometheus/prometheus.yml \
-    prom/prometheus
-```
-5. Access the prometheus web UI at `<container IP>:9090/graph`
-
-## The `slim` tag
+## The `slim` build
 
 A `slim` version of the container is also provided that has no extra tools 
 installed for minimal container size. This may be useful when merely using the 
 container as a `cardano-node` executable.
+
+## Quickstart
+
+Follow our [quickstart guide](https://viperstaking.com/ada-tools/node-quickstart/) 
+to get a relay node up and running using this container in less than 10 minutes!
 
 ---
 
