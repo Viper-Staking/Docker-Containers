@@ -1,6 +1,6 @@
 # Docker Containers
 
-Dockerized builds of the cardano full node software.
+Dockerized builds of the cardano full node software. See our container registry [here](https://gitlab.com/viper-staking/docker-containers/container_registry).
 
 ## Cardano-Node
 
