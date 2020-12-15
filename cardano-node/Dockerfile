@@ -4,6 +4,7 @@ LABEL maintainer="VIPER Staking Team (viperstakepool@gmail.com)"
 # Update and install the required packages
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
+  automake \
   build-essential \
   pkg-config \
   libffi-dev \
@@ -30,7 +31,7 @@ RUN git clone https://github.com/input-output-hk/libsodium \
   && git checkout 66f017f1 \
   && ./autogen.sh \
   && ./configure \
-  && make -j4 \
+  && make -j16 \
   && make install
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
@@ -39,27 +40,30 @@ ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 RUN wget https://downloads.haskell.org/~cabal/cabal-install-3.2.0.0/cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz \
   && tar -xf cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz \
   && rm cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz cabal.sig \
-  && mv cabal /usr/local/bin/
+  && mv cabal /usr/local/bin/ \
+  && cabal update
 
 # Install GHC
-RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.tar.xz \
-  && tar -xf ghc-8.6.5-x86_64-deb9-linux.tar.xz \
-  && rm ghc-8.6.5-x86_64-deb9-linux.tar.xz \
-  && cd ghc-8.6.5 \
+RUN wget https://downloads.haskell.org/ghc/8.10.2/ghc-8.10.2-x86_64-deb9-linux.tar.xz \
+  && tar -xf ghc-8.10.2-x86_64-deb9-linux.tar.xz \
+  && rm ghc-8.10.2-x86_64-deb9-linux.tar.xz \
+  && cd ghc-8.10.2 \
   && ./configure \
-  && make install \
-  && cabal update 
+  && make install
 
 # Install cardano node
-ARG TAG=1.23.0
+ARG TAG=1.24.2
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
-  && git fetch --all --tags \
-  && git checkout tags/$TAG \
-  && cabal build -j4 all \
+  && git fetch --all --recurse-submodules --tags \
+  && git tag && git checkout tags/$TAG \
+  && cabal configure --with-compiler=ghc-8.10.2 \
+  && echo "package cardano-crypto-praos" >>  cabal.project.local \
+  && echo "  flags: -external-libsodium-vrf" >>  cabal.project.local \
+  && cabal build -j16 all \
   && mkdir /opt/bin/ \
-  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-node-$TAG/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
-  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.6.5/cardano-cli-$TAG/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.2/cardano-node-$TAG/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.2/cardano-cli-$TAG/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
 
 # Install Prometheus Node Exporter
 ARG VERSION=1.0.1
