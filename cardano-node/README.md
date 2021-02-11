@@ -7,6 +7,8 @@ See the Dockerfile and build.sh script for more information.
 ## Default configuration (cardano-node binary)
 This container runs with the `cardano-node` as the `ENTRYPOINT` (see inside the `entrypoint.sh` script). A `CMD` statement provides a default argument if no arguments are provided when running the container. This will simply print the cardano-node version.
 
+Note: Make sure to `export HOME=/home/lovelace` so that it can be resolved correctly within the container
+
 The following command will run the container in this configuration:
 ``` bash
 docker run registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest
@@ -17,6 +19,7 @@ Below is an example on overriding the default CMD arguments to run cardano-node
 as a block producing node:
 ``` bash
 docker run registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest \
+    run \
     --database-path $HOME/cardano-node/db/ \
     --socket-path $HOME/cardano-node/db/node.socket \
     --host-addr "0.0.0.0" \
@@ -32,10 +35,12 @@ Below is an example on overriding the default CMD arguments to run cardano-node
 as a relay node:
 ``` bash
 docker run registry.gitlab.com/viper-staking/docker-containers/cardano-node:latest \
+    run \
     --database-path $HOME/cardano-node/db/ \
     --socket-path $HOME/cardano-node/db/node.socket \
     --port 4444 \
     --host-addr "0.0.0.0" \
+    --topology $HOME/cardano-node/topology.json \
     --config $HOME/cardano-node/config.json
 ```
 
