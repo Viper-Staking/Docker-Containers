@@ -52,7 +52,7 @@ RUN wget https://downloads.haskell.org/ghc/8.10.2/ghc-8.10.2-x86_64-deb9-linux.t
   && make install
 
 # Install cardano node
-ARG TAG=1.24.2
+ARG TAG=1.26.1
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --recurse-submodules --tags \
