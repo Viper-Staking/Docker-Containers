@@ -52,7 +52,8 @@ RUN wget https://downloads.haskell.org/ghc/8.10.2/ghc-8.10.2-x86_64-deb9-linux.t
   && make install
 
 # Install cardano node
-ARG TAG=1.27.0
+ARG TAG=alonzo-blue1.0
+ARG REL=1.27.0
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --recurse-submodules --tags \
@@ -60,10 +61,11 @@ RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cabal configure --with-compiler=ghc-8.10.2 \
   && echo "package cardano-crypto-praos" >>  cabal.project.local \
   && echo "  flags: -external-libsodium-vrf" >>  cabal.project.local \
-  && cabal build -j16 all \
-  && mkdir /opt/bin/ \
-  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.2/cardano-node-$TAG/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
-  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.2/cardano-cli-$TAG/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
+  && cabal build -j16 all
+RUN mkdir /opt/bin/ \
+  && cd /opt/cardano-node \
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.2/cardano-node-$REL/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.2/cardano-cli-$REL/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
 
 # Install Prometheus Node Exporter
 ARG VERSION=1.0.1
