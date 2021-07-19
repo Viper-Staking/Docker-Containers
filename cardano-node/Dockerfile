@@ -52,7 +52,7 @@ RUN wget https://downloads.haskell.org/ghc/8.10.2/ghc-8.10.2-x86_64-deb9-linux.t
   && make install
 
 # Install cardano node
-ARG TAG=alonzo-blue1.0
+ARG TAG=alonzo-white-1.1
 ARG REL=1.27.0
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
