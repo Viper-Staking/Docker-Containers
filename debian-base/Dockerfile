@@ -9,6 +9,7 @@ RUN apt-get update \
     npm \
     vim \
     tmux \
+    libffi-dev \
     python3 \
     python3-pip \
  && rm -rf /var/lib/apt/lists/*

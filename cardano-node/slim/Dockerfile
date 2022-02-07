@@ -21,11 +21,11 @@ RUN apt-get update && apt-get install -y \
   wget \
   libncursesw5 \
   libtool \
-  autoconf
-
-WORKDIR /opt
+  autoconf \
+  curl
 
 # Build and install the IOHK fork of libsodium.
+WORKDIR /opt
 RUN git clone https://github.com/input-output-hk/libsodium \
   && cd libsodium \
   && git checkout 66f017f1 \
@@ -37,33 +37,36 @@ ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Install cabal
-RUN wget https://downloads.haskell.org/~cabal/cabal-install-3.2.0.0/cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz \
-  && tar -xf cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz \
-  && rm cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz cabal.sig \
+WORKDIR /opt
+RUN wget https://downloads.haskell.org/~cabal/cabal-install-3.4.1.0/cabal-install-3.4.1.0-x86_64-linux-deb10.tar.xz \
+  && tar -xf cabal-install-3.4.1.0-x86_64-linux-deb10.tar.xz \
+  && rm cabal-install-3.4.1.0-x86_64-linux-deb10.tar.xz \
   && mv cabal /usr/local/bin/ \
   && cabal update
 
 # Install GHC
-RUN wget https://downloads.haskell.org/ghc/8.10.2/ghc-8.10.2-x86_64-deb9-linux.tar.xz \
-  && tar -xf ghc-8.10.2-x86_64-deb9-linux.tar.xz \
-  && rm ghc-8.10.2-x86_64-deb9-linux.tar.xz \
-  && cd ghc-8.10.2 \
+WORKDIR /opt
+RUN wget https://downloads.haskell.org/ghc/8.10.7/ghc-8.10.7-x86_64-deb9-linux.tar.xz \
+  && tar -xf ghc-8.10.7-x86_64-deb9-linux.tar.xz \
+  && rm ghc-8.10.7-x86_64-deb9-linux.tar.xz \
+  && cd ghc-8.10.7 \
   && ./configure \
   && make install
 
-# Install cardano node
-ARG TAG=1.27.0
+# Build and install cardano node
+WORKDIR /opt
+ARG TAG=1.33.0
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --recurse-submodules --tags \
   && git tag && git checkout tags/$TAG \
-  && cabal configure --with-compiler=ghc-8.10.2 \
+  && cabal configure --with-compiler=ghc-8.10.7 \
   && echo "package cardano-crypto-praos" >>  cabal.project.local \
   && echo "  flags: -external-libsodium-vrf" >>  cabal.project.local \
   && cabal build -j16 all \
   && mkdir /opt/bin/ \
-  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.2/cardano-node-$TAG/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
-  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.2/cardano-cli-$TAG/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.7/cardano-node-$TAG/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
+  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.7/cardano-cli-$TAG/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
 
 # Build the final stage and copy the build artifacts from the previous stage.
 FROM debian:buster-slim
