@@ -22,51 +22,52 @@ RUN apt-get update && apt-get install -y \
   libncursesw5 \
   libtool \
   autoconf \
+  liblmdb-dev \
   curl
+
+# Setup the Haskell Environement
+WORKDIR /opt
+RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+ENV PATH="$PATH:/root/.ghcup/bin/"
+RUN ghcup install ghc 8.10.7 \
+ && ghcup install cabal 3.6.2.0 \
+ && ghcup set ghc 8.10.7 \
+ && ghcup set cabal 3.6.2.0
 
 # Build and install the IOHK fork of libsodium.
 WORKDIR /opt
 RUN git clone https://github.com/input-output-hk/libsodium \
-  && cd libsodium \
-  && git checkout 66f017f1 \
-  && ./autogen.sh \
-  && ./configure \
-  && make -j16 \
-  && make install
+ && cd libsodium \
+ && git checkout 66f017f1 \
+ && ./autogen.sh \
+ && ./configure \
+ && make -j16 \
+ && make install
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-# Install cabal
+# Download and install libsecp256k1:
 WORKDIR /opt
-RUN wget https://downloads.haskell.org/~cabal/cabal-install-3.4.1.0/cabal-install-3.4.1.0-x86_64-linux-deb10.tar.xz \
-  && tar -xf cabal-install-3.4.1.0-x86_64-linux-deb10.tar.xz \
-  && rm cabal-install-3.4.1.0-x86_64-linux-deb10.tar.xz \
-  && mv cabal /usr/local/bin/ \
-  && cabal update
-
-# Install GHC
-WORKDIR /opt
-RUN wget https://downloads.haskell.org/ghc/8.10.7/ghc-8.10.7-x86_64-deb9-linux.tar.xz \
-  && tar -xf ghc-8.10.7-x86_64-deb9-linux.tar.xz \
-  && rm ghc-8.10.7-x86_64-deb9-linux.tar.xz \
-  && cd ghc-8.10.7 \
-  && ./configure \
-  && make install
+RUN git clone https://github.com/bitcoin-core/secp256k1 \
+ && cd secp256k1 \
+ && git checkout ac83be33 \
+ && ./autogen.sh \
+ && ./configure --enable-module-schnorrsig --enable-experimental \
+ && make -j16 \
+ && make install
 
 # Build and install cardano node
 WORKDIR /opt
-ARG TAG=1.34.1
+ARG TAG=1.35.3
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
-  && cd cardano-node \
-  && git fetch --all --recurse-submodules --tags \
-  && git tag && git checkout tags/$TAG \
-  && cabal configure --with-compiler=ghc-8.10.7 \
-  && echo "package cardano-crypto-praos" >>  cabal.project.local \
-  && echo "  flags: -external-libsodium-vrf" >>  cabal.project.local \
-  && cabal build -j16 all \
-  && mkdir /opt/bin/ \
-  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.7/cardano-node-$TAG/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
-  && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.7/cardano-cli-$TAG/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
+ && cd cardano-node \
+ && git fetch --all --recurse-submodules --tags \
+ && git tag && git checkout tags/$TAG \
+ && echo "with-compiler: ghc-8.10.7" >>  cabal.project.local \
+ && cabal build -j16 all \
+ && mkdir /opt/bin/ \
+ && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.7/cardano-node-$TAG/x/cardano-node/build/cardano-node/cardano-node /opt/bin/ \
+ && cp -p dist-newstyle/build/x86_64-linux/ghc-8.10.7/cardano-cli-$TAG/x/cardano-cli/build/cardano-cli/cardano-cli /opt/bin/
 
 # Install Rust
 WORKDIR /opt
@@ -90,8 +91,8 @@ ARG VERSION=1.0.1
 ARG DIRNAME="node_exporter-$VERSION.linux-amd64"
 WORKDIR /opt
 RUN wget https://github.com/prometheus/node_exporter/releases/download/v$VERSION/$DIRNAME.tar.gz \
-  && tar xvfz $DIRNAME.tar.gz \
-  && mv $DIRNAME/node_exporter /usr/local/bin
+ && tar xvfz $DIRNAME.tar.gz \
+ && mv $DIRNAME/node_exporter /usr/local/bin
 
 # Build the final stage and copy the build artifacts from the previous stage.
 FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
