@@ -55,7 +55,7 @@ RUN wget https://downloads.haskell.org/ghc/8.10.7/ghc-8.10.7-x86_64-deb9-linux.t
 
 # Build and install cardano node
 WORKDIR /opt
-ARG TAG=1.33.0
+ARG TAG=1.34.1
 RUN git clone https://github.com/input-output-hk/cardano-node.git \
   && cd cardano-node \
   && git fetch --all --recurse-submodules --tags \
@@ -78,8 +78,8 @@ RUN rustup install stable && rustup default stable && rustup update \
 
 # Build and install CNCLI
 WORKDIR /opt
-ARG CNCLI_TAG=v4.0.4
-RUN git clone --recurse-submodules https://github.com/AndrewWestberg/cncli \
+ARG CNCLI_TAG=v5.1.1
+RUN git clone --recurse-submodules https://github.com/cardano-community/cncli.git \
  && cd cncli \
  && git checkout $CNCLI_TAG \
  && cargo install --path . --force \
