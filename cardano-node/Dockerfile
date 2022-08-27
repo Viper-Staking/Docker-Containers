@@ -79,7 +79,7 @@ RUN rustup install stable && rustup default stable && rustup update \
 
 # Build and install CNCLI
 WORKDIR /opt
-ARG CNCLI_TAG=v5.1.1
+ARG CNCLI_TAG=v5.1.2
 RUN git clone --recurse-submodules https://github.com/cardano-community/cncli.git \
  && cd cncli \
  && git checkout $CNCLI_TAG \
@@ -110,11 +110,11 @@ COPY entrypoint.sh /usr/local/bin/
 
 # Create a directory for the node config files and blockchain database. 
 # This needs to be mounted to a host volume on container run.
-USER lovelace
 RUN mkdir ${HOME}/cardano-node/
 
 # Clone the cardano-tools repo
-RUN python3 -m pip install cardano-tools
+RUN python3 -m pip install --upgrade pip \
+ && python3 -m pip install cardano-tools
 
 # Expose prometheus monitoring ports
 EXPOSE 9100
