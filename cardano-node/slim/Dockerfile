@@ -72,6 +72,7 @@ RUN git clone https://github.com/input-output-hk/cardano-node.git \
 # Build the final stage and copy the build artifacts from the previous stage.
 FROM debian:buster-slim
 COPY --from=build /usr/local/lib/libsodium.so* /usr/local/lib/
+COPY --from=build /usr/local/lib/libsecp256k1* /usr/local/lib/
 COPY --from=build /opt/bin/cardano-cli /usr/local/bin/
 COPY --from=build /opt/bin/cardano-node /usr/local/bin/
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"

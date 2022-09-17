@@ -97,6 +97,7 @@ RUN wget https://github.com/prometheus/node_exporter/releases/download/v$VERSION
 # Build the final stage and copy the build artifacts from the previous stage.
 FROM registry.gitlab.com/viper-staking/docker-containers/debian-base:latest
 COPY --from=build /usr/local/lib/libsodium* /usr/local/lib/
+COPY --from=build /usr/local/lib/libsecp256k1* /usr/local/lib/
 COPY --from=build /opt/bin/cardano-cli /usr/local/bin/
 COPY --from=build /opt/bin/cardano-node /usr/local/bin/
 COPY --from=build /usr/local/bin/node_exporter /usr/local/bin
